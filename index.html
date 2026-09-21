@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="mr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>काहीतरी ‘क्लिक’ होते!</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            marathi: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
+          },
+          colors: {
+            amberGlow: '#f59e0b',
+            accentViolet: '#8b5cf6',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --bg-page: #faf8f5;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --border-card: rgba(229, 231, 235, 0.8);
+      --text-main: #1f2937;
+      --text-muted: #4b5563;
+      --highlight-click: #b45309;
+    }
+
+    .dark {
+      --bg-page: #0b0f19;
+      --card-bg: rgba(21, 29, 46, 0.85);
+      --border-card: rgba(51, 65, 85, 0.6);
+      --text-main: #f3f4f6;
+      --text-muted: #94a3b8;
+      --highlight-click: #fbbf24;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Paragraph typography rules requested by user */
+    .marathi-body {
+      text-align: justify;
+      text-justify: inter-word;
+      hyphens: none;
+      -webkit-hyphens: none;
+      word-break: normal;
+      overflow-wrap: normal;
+      line-height: 1.85;
+      font-size: 1.125rem;
+    }
+
+    @media (max-width: 640px) {
+      .marathi-body {
+        font-size: 1.05rem;
+        line-height: 1.78;
+      }
+    }
+
+    /* SVG Keyframe Animations */
+    @keyframes subtlePulse {
+      0%, 100% { transform: scale(1); opacity: 0.88; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    @keyframes auraExpand {
+      0% { transform: scale(0.85); opacity: 0.7; }
+      50% { transform: scale(1.18); opacity: 0.35; }
+      100% { transform: scale(0.85); opacity: 0.7; }
+    }
+
+    @keyframes sparkFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(8deg); }
+    }
+
+    @keyframes gentleOrbit {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .anim-bulb {
+      transform-origin: center;
+      animation: subtlePulse 3.5s ease-in-out infinite;
+    }
+
+    .anim-aura {
+      transform-origin: center;
+      animation: auraExpand 5s ease-in-out infinite;
+    }
+
+    .anim-sparks {
+      animation: sparkFloat 4s ease-in-out infinite;
+    }
+
+    .anim-orbit {
+      transform-origin: 160px 140px;
+      animation: gentleOrbit 20s linear infinite;
+    }
+
+    /* Click repeat phrase styling */
+    .click-tag {
+      display: inline-block;
+      font-weight: 600;
+      color: var(--highlight-click);
+      letter-spacing: 0.01em;
+    }
+  </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between selection:bg-amber-400/30 selection:text-amber-900 dark:selection:text-amber-200">
+
+  <header class="fixed top-4 right-4 z-50 flex items-center space-x-2.5 sm:space-x-3">
+    <!-- Share Button -->
+    <button id="shareBtn" aria-label="Share page" class="p-2.5 sm:px-3 sm:py-2.5 rounded-full bg-white/85 dark:bg-slate-800/85 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-lg text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 active:scale-95 transition-all duration-200 flex items-center gap-1.5">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+      </svg>
+      <span class="text-xs font-semibold tracking-wide hidden sm:inline">शेअर</span>
+    </button>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggleBtn" aria-label="Toggle Theme" class="p-2.5 rounded-full bg-white/85 dark:bg-slate-800/85 backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 shadow-md hover:shadow-lg text-slate-700 dark:text-slate-200 hover:text-amber-600 dark:hover:text-amber-400 active:scale-95 transition-all duration-200">
+      <!-- Sun Icon (for Dark mode to switch to Light) -->
+      <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+      <!-- Moon Icon (for Light mode to switch to Dark) -->
+      <svg id="moonIcon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-br from-amber-200/35 via-orange-200/20 to-violet-300/25 dark:from-amber-600/10 dark:via-purple-900/15 dark:to-cyan-900/15 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-10 right-0 w-[420px] h-[420px] bg-gradient-to-tl from-emerald-200/25 to-teal-300/20 dark:from-teal-900/10 dark:to-slate-900/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <main class="w-full max-w-3xl mx-auto px-4 sm:px-6 md:px-8 pt-16 sm:pt-20 pb-16">
+    <article class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md rounded-3xl p-6 sm:p-10 md:p-12 shadow-xl shadow-slate-200/50 dark:shadow-black/40 border border-slate-200/80 dark:border-slate-800/80 transition-all duration-300">
+      
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-center text-slate-900 dark:text-white mb-6">
+        काहीतरी ‘क्लिक’ होते!
+      </h1>
+
+      <div class="flex justify-center my-6" aria-hidden="true">
+        <svg viewBox="0 0 320 230" class="w-64 sm:w-80 h-auto filter drop-shadow-md select-none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Radial gradient for insight glow -->
+            <radialGradient id="sparkAura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85"/>
+              <stop offset="45%" stop-color="#f59e0b" stop-opacity="0.45"/>
+              <stop offset="75%" stop-color="#ec4899" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+            </radialGradient>
+
+            <linearGradient id="bulbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="50%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#ea580c"/>
+            </linearGradient>
+
+            <linearGradient id="baseGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#64748b"/>
+              <stop offset="50%" stop-color="#94a3b8"/>
+              <stop offset="100%" stop-color="#64748b"/>
+            </linearGradient>
+
+            <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+
+          <!-- Outer Pulsing Aura -->
+          <circle cx="160" cy="105" r="75" fill="url(#sparkAura)" class="anim-aura"/>
+
+          <!-- Concentric Resonance Ripples -->
+          <circle cx="160" cy="105" r="86" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3 6" opacity="0.45" class="anim-aura"/>
+          <circle cx="160" cy="105" r="102" fill="none" stroke="#8b5cf6" stroke-width="0.8" stroke-dasharray="4 8" opacity="0.35"/>
+
+          <!-- Orbiting Particles -->
+          <g class="anim-orbit">
+            <circle cx="160" cy="22" r="3.5" fill="#38bdf8" filter="url(#glowFilter)"/>
+            <circle cx="238" cy="105" r="3" fill="#f43f5e" filter="url(#glowFilter)"/>
+            <circle cx="82" cy="105" r="3" fill="#10b981" filter="url(#glowFilter)"/>
+            <circle cx="160" cy="188" r="2.5" fill="#a855f7" filter="url(#glowFilter)"/>
+          </g>
+
+          <!-- Floating Sparkles around Insight -->
+          <g class="anim-sparks" fill="#fbbf24">
+            <!-- Sparkle top-right -->
+            <path d="M210 52 Q210 62 220 62 Q210 62 210 72 Q210 62 200 62 Q210 62 210 52 Z" opacity="0.9"/>
+            <!-- Sparkle top-left -->
+            <path d="M108 60 Q108 68 116 68 Q108 68 108 76 Q108 68 100 68 Q108 68 108 60 Z" fill="#38bdf8" opacity="0.85"/>
+            <!-- Tiny spark -->
+            <circle cx="218" cy="130" r="2" fill="#ec4899"/>
+            <circle cx="102" cy="132" r="2" fill="#10b981"/>
+          </g>
+
+          <!-- Central Lightbulb: Symbol of Serene Insight / Realisation -->
+          <g class="anim-bulb">
+            <!-- Filament Glow Inner -->
+            <ellipse cx="160" cy="100" rx="34" ry="36" fill="#fef9c3" opacity="0.9" filter="url(#glowFilter)"/>
+
+            <!-- Light Bulb Glass Body -->
+            <path d="M132 102 C132 78 144 60 160 60 C176 60 188 78 188 102 C188 116 179 127 174 135 L146 135 C141 127 132 116 132 102 Z" 
+                  fill="url(#bulbGradient)" 
+                  stroke="#fbbf24" 
+                  stroke-width="2.5" 
+                  opacity="0.95"/>
+
+            <!-- Inner Filament Path forming a gentle heart/spark loop -->
+            <path d="M152 115 L152 98 Q152 86 160 86 Q168 86 168 98 L168 115" 
+                  fill="none" 
+                  stroke="#ffffff" 
+                  stroke-width="2.8" 
+                  stroke-linecap="round" 
+                  filter="url(#glowFilter)"/>
+            <circle cx="160" cy="85" r="2.5" fill="#ffffff"/>
+
+            <!-- Light Rays / Radiance -->
+            <line x1="160" y1="46" x2="160" y2="34" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="198" y1="62" x2="207" y2="53" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="122" y1="62" x2="113" y2="53" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="214" y1="102" x2="226" y2="102" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="106" y1="102" x2="94" y2="102" stroke="#f59e0b" stroke-width="2.8" stroke-linecap="round"/>
+
+            <!-- Bulb Base Threading -->
+            <rect x="146" y="136" width="28" height="5" rx="2.5" fill="url(#baseGradient)"/>
+            <rect x="148" y="143" width="24" height="4" rx="2" fill="url(#baseGradient)"/>
+            <rect x="150" y="149" width="20" height="4" rx="2" fill="url(#baseGradient)"/>
+            <path d="M153 154 C153 158 167 158 167 154 Z" fill="#475569"/>
+          </g>
+
+          <!-- Serene Base Curve representing grounding / mind platform -->
+          <path d="M100 185 C140 178 180 178 220 185" fill="none" stroke="#cbd5e1" stroke-width="1.8" stroke-linecap="round" class="dark:stroke-slate-700"/>
+        </svg>
+      </div>
+
+      <div class="space-y-6 text-slate-800 dark:text-slate-100 font-normal">
+        
+        <p class="marathi-body">
+          आपण सर्व रोजच्या जीवनात अनेक चुका करत असतो, चुकीचे वर्तन करत असतो, इतरांना दुखावणारे, आपले स्वतःचेच नुकसान करणारे निर्णय घेत असतो.
+        </p>
+
+        <p class="marathi-body">
+          आयुष्यात काहीतरी ‘क्लिक’ होईपर्यंतचा हा एक कालखंड असा असतो की त्यात या सतत होणाऱ्या चुकांची आपल्याला जाणीवच नसते. आपण भानावरच नसतो. State of complete unawareness असते.
+        </p>
+
+        <p class="marathi-body">
+          मग अचानक काहीतरी घडते; आपल्याला एकादी ‘ठेच’ लागते किंवा कर्त्या-करवित्याची इच्छा होते आणि आपला ‘स्वानुभूतीचा प्रवास’ सुरू होतो.
+        </p>
+
+        <p class="marathi-body">
+          <span class="click-tag">काहीतरी ‘क्लिक’ होते.</span>
+        </p>
+
+        <p class="marathi-body">
+          या नवीन प्रवासात आपण नियमित ध्यानधारणा करू लागतो. निकोप सवयींचा (Healthy Habits चा) जमेल तितका अंगिकार करू लागतो. हे सर्व थोडे थोडे अंगवळणी पडू लागते. रोजच्या जीवनात आपण पूर्वीच्या ‘चुका’ करतच असतो पण अचानक एक वेळ अशी येते की आपल्या हातून चूक झाल्यावर थोड्या वेळानंतर का होईना, पण आपण भानावर येतो; आपल्याला त्या चुकीची लख्ख जाणीव होते. पश्चात बुद्धी होते. Post facto realisation होते.
+        </p>
+
+        <p class="marathi-body">
+          <span class="click-tag">काहीतरी ‘क्लिक’ होते.</span>
+        </p>
+
+        <p class="marathi-body">
+          काही कालावधीनंतर अचानक आधीसारखीच किंवा एखादी नवीन ‘चूक’ आपल्याकडून होते. पण या वेळेस ती चूक होत असताना किंवा झाल्या क्षणी आपल्याला लक्षात येते, आपण भानावर येतो आणि अर्र, ‘चूक झाली’ अशी जाणीव होते. Present state awareness येतो. Realisation होते.
+        </p>
+
+        <p class="marathi-body">
+          <span class="click-tag">काहीतरी ‘क्लिक’ होते.</span>
+        </p>
+
+        <p class="marathi-body">
+          हळूहळू या state of awareness ची, realisation आणि mindfulness ची, भानावर राहण्याची, वर्तमानात जगण्याची सवय अंगवळणी पडायला लागते. आपल्याला ‘आतून’ बरे वाटते आहे असे कुठेतरी नक्की जाणवू लागते.
+        </p>
+
+        <p class="marathi-body">
+          <span class="click-tag">काहीतरी ‘क्लिक’ होते.</span>
+        </p>
+
+        <p class="marathi-body">
+          मग अजून काही दिवसांनी पुन्हा एक वेळ येते; पूर्वी अनुभवलेल्या परिस्थितीसम किंवा एखादी अगदी वेगळी घटना घडते. पण या वेळेस मात्र आधीच काहीतरी ‘क्लिक’ होते आणि आपल्याकडून पूर्वीसारखी किंवा एखादी नवीन ‘चूक’ होण्याआधीच आपण भानावर येतो, अचानक कसलीतरी जाणीव होते आणि पूर्णपणे वर्तमानात राहून आपण एक योग्य निर्णय घेतो. यापूर्वी आपल्या हातून सर्रास होऊ शकणारी तीच ती ‘चूक’ आपण यशस्वीरीत्या टाळतो, होऊच देत नाही. मनाला खूप समाधान वाटते, आतून ‘गार’ वाटते. हलके वाटते. हेच असते pre-emptive realisation. हाच तो pre-emptive awareness.
+        </p>
+
+        <p class="marathi-body">
+          हे सगळे फक्त आपल्याकडून होणाऱ्या ‘घोडचुकांच्या’ बाबतीतच होते असे अजिबात नाही. आपल्याच, वरवर पाहता क्षुल्लक वाटणाऱ्या पण चुकीच्या सवयींमध्ये होणारे सकारात्मक बदल देखील आपले आपल्यालाच लक्षात येऊ लागतात.
+        </p>
+
+        <p class="marathi-body">
+          <span class="click-tag">काहीतरी ‘क्लिक’ होते.</span>
+        </p>
+
+        <p class="marathi-body">
+          यानंतरही मनुष्यस्वभावानुसार होणाऱ्या ‘चुका’ आपल्या कडून होतच राहतात. त्या बंद होत नाहीत. कदाचित थोड्या कमी होतात. पण तरीही हे भानावर असणे, वर्तमानात जगणे, aware आणि mindful असणे हळू हळू अंगी भिनते. त्याची सवय होते. ही अर्थातच उत्तम सवय आहे. वेळोवेळी काहीतरी ‘क्लिक’ होतच राहते. ‘क्लिकक्लिकाट’ होण्याची फ्रिक्वेन्सी वाढते. वाढलेल्या ‘क्लिक्स’ जाणवू लागतात.
+        </p>
+
+        <p class="text-center tracking-widest text-amber-600/80 dark:text-amber-400/80 text-xl py-2 select-none" aria-hidden="true">
+          ⧫⧫⧫
+        </p>
+
+        <p class="marathi-body">
+          या ज्या ‘क्लिक्स’ असतात ना; ज्या आपल्याला शब्दांतही व्यक्त करता येत नाहीत आणि कोणत्याही प्रकारे दाखवूनही देता येत नाहीत, त्या ‘क्लिक्स’ म्हणजेच त्या त्या वेळेस येणारी ‘अनुभूती’ असते!
+        </p>
+
+        <p class="marathi-body">
+          ही ‘अनुभूती’ खूप काही उपासना केल्यावरच मिळते असे अजिबात नाही. आयुष्याच्या प्रवासात वेगवेगळ्या वेळी होणाऱ्या ‘क्लिक्स’ मधून ती आपल्या समोर येत राहते. आपण त्याची जाणीव ठेऊन, भानावर राहून ती त्या त्या वेळेस गोळा करायची असते आणि तिचा साठा वाढवायचा असतो.
+        </p>
+
+        <p class="marathi-body">
+          पण एक आहे; ‘अनुभूती’ ज्याची त्यालाच मिळवता येते; आणि प्रामाणिक प्रयत्न केले तर ती येतेच.
+        </p>
+
+        <p class="marathi-body">
+          आयुष्याच्या प्रवासात खूप पुढे जाऊन कदाचित काहीतरी ‘क्लिक’ होणे देखील जाणवायचे बंद होत असेल आणि तीच कदाचित enlightenment असेल. असेना बापडी. आपल्यासारख्या सामान्य जीवांसाठी या वेळोवेळी पदरात पडणाऱ्या ‘अनुभूती क्लिक्स’ गोळा करत राहणे सुखी आणि समाधानी आयुष्यासाठी पुरेसे आहे हे नक्की.
+        </p>
+
+        <p class="text-right pt-6 text-slate-600 dark:text-slate-400 font-medium">
+          जयदीप | २०२३१०१०
+        </p>
+
+      </div>
+    </article>
+  </main>
+
+  <div id="toastNotification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900/90 dark:bg-slate-100/95 text-white dark:text-slate-900 px-4 py-2.5 rounded-xl shadow-2xl text-sm font-medium backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300 transform translate-y-3">
+    <span id="toastMessage">लिंक कॉपी केली आहे!</span>
+  </div>
+
+  <script>
+    (function () {
+      // DOM Elements
+      const htmlElement = document.documentElement;
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const sunIcon = document.getElementById('sunIcon');
+      const moonIcon = document.getElementById('moonIcon');
+      const shareBtn = document.getElementById('shareBtn');
+      const toast = document.getElementById('toastNotification');
+      const toastMessage = document.getElementById('toastMessage');
+
+      // Toast Helper Function
+      let toastTimer = null;
+      function showToast(msg) {
+        if (!toast || !toastMessage) return;
+        toastMessage.textContent = msg;
+        toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+          toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 2600);
+      }
+
+      // Theme Management
+      function updateIcons(isDark) {
+        if (isDark) {
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+        } else {
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+        }
+      }
+
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          htmlElement.classList.add('dark');
+          localStorage.setItem('theme_preference', 'dark');
+          updateIcons(true);
+        } else {
+          htmlElement.classList.remove('dark');
+          localStorage.setItem('theme_preference', 'light');
+          updateIcons(false);
+        }
+      }
+
+      // Detect stored preference or system default
+      const savedTheme = localStorage.getItem('theme_preference');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+        applyTheme('dark');
+      } else {
+        applyTheme('light');
+      }
+
+      // Theme Toggle Click Handler
+      themeToggleBtn.addEventListener('click', () => {
+        const isCurrentlyDark = htmlElement.classList.contains('dark');
+        applyTheme(isCurrentlyDark ? 'light' : 'dark');
+      });
+
+      // Share Button Handler (with Web Share API + fallback)
+      shareBtn.addEventListener('click', async () => {
+        const shareData = {
+          title: 'काहीतरी ‘क्लिक’ होते!',
+          text: 'काहीतरी ‘क्लिक’ होते! — एक विचारप्रवर्तक लेख.',
+          url: window.location.href,
+        };
+
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+            return;
+          } catch (err) {
+            // If user cancels or share fails, fallback to copy
+            if (err.name !== 'AbortError') {
+              fallbackCopy();
+            }
+          }
+        } else {
+          fallbackCopy();
+        }
+
+        function fallbackCopy() {
+          const textToCopy = window.location.href;
+          try {
+            if (navigator.clipboard && window.isSecureContext) {
+              navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast('लिंक कॉपी केली आहे!');
+              }).catch(() => {
+                execCopy();
+              });
+            } else {
+              execCopy();
+            }
+          } catch (e) {
+            execCopy();
+          }
+
+          function execCopy() {
+            const input = document.createElement('input');
+            input.setAttribute('value', textToCopy);
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            showToast('लिंक कॉपी केली आहे!');
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
