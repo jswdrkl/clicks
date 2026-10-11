@@ -1,108 +1,327 @@
 <!DOCTYPE html>
-<html lang="mr" class="scroll-smooth">
+<html lang="mr" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>काहीतरी ‘क्लिक’ होते!</title>
-  
-  <!-- IBM Plex Sans & IBM Plex Sans Devanagari font families -->
+
+  <!-- Google Fonts: IBM Plex Sans Devanagari & Ubuntu -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@300;400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            ibm: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
-          },
-          colors: {
-            warmLight: '#faf8f5',
-            paperLight: '#ffffff',
-            darkBg: '#121417',
-            cardDark: '#1a1d24',
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@400;500&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
-    body {
-      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 0%, #fef8f0 0%, #f5f2eb 60%, #ece6dc 100%);
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(220, 210, 195, 0.7);
+      --card-shadow: 0 16px 48px -12px rgba(90, 70, 50, 0.12);
+      --text-main: #2b2b2b;
+      --title-color: #1a1a1a;
+      
+      /* Vibrant color for recurring phrase (Light mode) */
+      --click-color: #d9480f;
+      --click-glow: rgba(217, 72, 15, 0.15);
+
+      --divider-color: #d4a373;
+      --btn-bg: #ffffff;
+      --btn-border: #dcd0c0;
+      --btn-text: #2b2b2b;
+      --btn-hover-bg: #f3ede2;
+      --share-btn-bg: #ffffff;
+      --share-btn-border: #d4a373;
+      --share-btn-text: #7a4816;
     }
 
-    /* Paragraph justified alignment and non-breaking rules */
+    [data-theme="dark"] {
+      --bg-gradient: radial-gradient(circle at 50% 0%, #1e1b24 0%, #121016 60%, #0a080d 100%);
+      --card-bg: rgba(24, 21, 30, 0.88);
+      --card-border: rgba(70, 60, 85, 0.5);
+      --card-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.5);
+      --text-main: #dfdae3;
+      --title-color: #f7f3fb;
+
+      /* Vibrant radiant gold for recurring phrase (Dark mode) */
+      --click-color: #ffaa2a;
+      --click-glow: rgba(255, 170, 42, 0.28);
+
+      --divider-color: #9d8189;
+      --btn-bg: #221e29;
+      --btn-border: #443c50;
+      --btn-text: #e8e2ee;
+      --btn-hover-bg: #2d2836;
+      --share-btn-bg: #221e29;
+      --share-btn-border: #ffaa2a;
+      --share-btn-text: #ffd175;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-weight: 400 !important;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px 60px;
+      transition: background 0.35s ease, color 0.35s ease;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .top-controls {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--btn-border);
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-size: 0.95rem;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-btn:hover {
+      background: var(--btn-hover-bg);
+      transform: translateY(-1px);
+    }
+
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .document-card {
+      width: 100%;
+      max-width: 760px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 44px 42px;
+      transition: all 0.35s ease;
+    }
+
+    @media (max-width: 600px) {
+      .document-card {
+        padding: 26px 20px;
+        border-radius: 16px;
+      }
+    }
+
+    /* Animated SVG Banner */
+    .svg-container {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto 30px auto;
+      display: block;
+    }
+
+    .svg-container svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    @keyframes pulseAura {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.12); opacity: 0.95; }
+    }
+    @keyframes floatSpark {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(15deg); }
+    }
+    @keyframes rotateLotus {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes rayFlash {
+      0%, 100% { opacity: 0.3; transform: scale(0.96); }
+      50% { opacity: 0.9; transform: scale(1.05); }
+    }
+
+    .anim-pulse {
+      transform-origin: 200px 140px;
+      animation: pulseAura 4.5s ease-in-out infinite;
+    }
+    .anim-spark-1 {
+      transform-origin: 200px 75px;
+      animation: floatSpark 3s ease-in-out infinite;
+    }
+    .anim-spark-2 {
+      transform-origin: 130px 130px;
+      animation: floatSpark 3.8s ease-in-out infinite 0.7s;
+    }
+    .anim-spark-3 {
+      transform-origin: 270px 130px;
+      animation: floatSpark 4.2s ease-in-out infinite 1.4s;
+    }
+    .anim-rotate {
+      transform-origin: 200px 140px;
+      animation: rotateLotus 30s linear infinite;
+    }
+    .anim-rays {
+      transform-origin: 200px 140px;
+      animation: rayFlash 3.5s ease-in-out infinite;
+    }
+
+    /* Title Styling */
+    h1.doc-title {
+      font-size: 2.15rem;
+      text-align: center;
+      color: var(--title-color);
+      margin-bottom: 30px;
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 600px) {
+      h1.doc-title {
+        font-size: 1.7rem;
+        margin-bottom: 24px;
+      }
+    }
+
+    /* Content Typography */
     .content-body {
       text-align: justify;
       text-justify: inter-word;
-      word-break: normal;
+      word-break: keep-all;
       overflow-wrap: break-word;
       hyphens: none;
     }
 
-    /* Animated SVG Elements */
-    @keyframes pulseGlow {
-      0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.45));
-        opacity: 0.95;
-      }
-      50% {
-        transform: scale(1.08);
-        filter: drop-shadow(0 0 24px rgba(251, 191, 36, 0.85));
-        opacity: 1;
+    .content-body p {
+      font-size: 1.25rem;
+      line-height: 1.95;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 600px) {
+      .content-body p {
+        font-size: 1.12rem;
+        line-height: 1.85;
+        margin-bottom: 18px;
       }
     }
 
-    @keyframes sparkRotate {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
+    /* English Words Styling */
+    .en {
+      font-family: 'Ubuntu', sans-serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* Recurring Phrase: Vibrant, high-contrast & centered */
+    p.click-phrase {
+      text-align: center;
+      font-size: 1.08rem;
+      line-height: 1.6;
+      color: var(--click-color);
+      letter-spacing: 0.04em;
+      margin: 20px 0 24px 0;
+      text-shadow: 0 0 10px var(--click-glow);
+    }
+
+    @media (max-width: 600px) {
+      p.click-phrase {
+        font-size: 1rem;
+        margin: 16px 0 20px 0;
       }
     }
 
-    @keyframes beamFlash {
-      0%, 100% {
-        opacity: 0.35;
-        stroke-dashoffset: 0;
-      }
-      50% {
-        opacity: 1;
-        stroke-dashoffset: 4;
-      }
+    /* Centered Diamond Separators */
+    .section-separator {
+      text-align: center;
+      letter-spacing: 0.45em;
+      font-size: 1.15rem;
+      color: var(--divider-color);
+      margin: 28px 0;
     }
 
-    .pulse-bulb {
-      transform-origin: center;
-      animation: pulseGlow 3s ease-in-out infinite;
+    /* Centered Date Line */
+    .date-centered {
+      text-align: center;
+      font-size: 1.1rem;
+      color: var(--divider-color);
+      letter-spacing: 0.22em;
+      margin: 32px 0 14px 0;
     }
 
-    .spark-group {
-      transform-origin: 100px 90px;
-      animation: sparkRotate 24s linear infinite;
+    /* Bottom Share Container */
+    .bottom-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 26px;
+      padding-top: 18px;
     }
 
-    .beam-ray {
-      animation: beamFlash 2s ease-in-out infinite;
+    .share-btn {
+      background: var(--share-btn-bg);
+      border: 1px solid var(--share-btn-border);
+      color: var(--share-btn-text);
+      padding: 10px 24px;
+      font-size: 1rem;
+    }
+
+    .share-btn:hover {
+      background: var(--btn-hover-bg);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: rgba(20, 20, 25, 0.94);
+      color: #ffffff;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s ease;
+      z-index: 1000;
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
-<body class="bg-[#f9f7f4] dark:bg-[#121417] text-stone-800 dark:text-stone-100 transition-colors duration-300 min-h-screen py-8 px-4 sm:px-6 md:px-12 flex flex-col items-center">
+<body>
 
-  <div class="w-full max-w-3xl flex justify-end mb-4">
-    <button id="themeToggleBtn" aria-label="Toggle Theme" class="p-2.5 rounded-full bg-stone-200/80 hover:bg-stone-300 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 shadow-sm">
-      <!-- Sun Icon -->
-      <svg id="sunIcon" class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <!-- Top Controls: Theme Toggle Only -->
+  <div class="top-controls">
+    <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle theme">
+      <svg id="themeIconSun" style="display:none;" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="5"></circle>
         <line x1="12" y1="1" x2="12" y2="3"></line>
         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -113,247 +332,185 @@
         <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
       </svg>
-      <!-- Moon Icon -->
-      <svg id="moonIcon" class="w-5 h-5 block dark:hidden text-stone-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+      <svg id="themeIconMoon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
       </svg>
     </button>
   </div>
 
-  <main class="w-full max-w-3xl bg-white/90 dark:bg-[#1a1d24]/90 backdrop-blur-sm rounded-3xl p-6 sm:p-10 md:p-14 shadow-xl border border-stone-200/70 dark:border-stone-800 transition-colors duration-300">
+  <main class="document-card">
 
-    <!-- Light Colorful Animated SVG representing the Title "काहीतरी ‘क्लिक’ होते" -->
-    <div class="flex justify-center mb-6">
-      <svg class="w-32 h-32 sm:w-40 sm:h-40" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="काहीतरी ‘क्लिक’ होते - प्रबोधन व अनुभूती दर्शक दीप">
+    <!-- Animated Insight/Mindfulness SVG Banner -->
+    <div class="svg-container">
+      <svg viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="auroraGlow" cx="50%" cy="45%" r="50%">
-            <stop offset="0%" stop-color="#fef08a" stop-opacity="0.9" />
-            <stop offset="35%" stop-color="#fed7aa" stop-opacity="0.6" />
-            <stop offset="70%" stop-color="#c4b5fd" stop-opacity="0.3" />
-            <stop offset="100%" stop-color="#6ee7b7" stop-opacity="0" />
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffd56b" stop-opacity="1" />
+            <stop offset="45%" stop-color="#ff9a3c" stop-opacity="0.8" />
+            <stop offset="75%" stop-color="#ff6f59" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="#ff6f59" stop-opacity="0" />
           </radialGradient>
-          <linearGradient id="bulbGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fde047" />
-            <stop offset="60%" stop-color="#f59e0b" />
-            <stop offset="100%" stop-color="#ec4899" />
-          </linearGradient>
-          <linearGradient id="filamentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#38bdf8" />
-            <stop offset="50%" stop-color="#ec4899" />
-            <stop offset="100%" stop-color="#f59e0b" />
-          </linearGradient>
-          <linearGradient id="rayGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fb7185" />
-            <stop offset="100%" stop-color="#38bdf8" />
+          <radialGradient id="mindAura" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#80deea" stop-opacity="0.75" />
+            <stop offset="50%" stop-color="#b388ff" stop-opacity="0.45" />
+            <stop offset="100%" stop-color="#80deea" stop-opacity="0" />
+          </radialGradient>
+          <linearGradient id="streamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff758c" />
+            <stop offset="50%" stop-color="#ff7eb3" />
+            <stop offset="100%" stop-color="#7ee8fa" />
           </linearGradient>
         </defs>
 
-        <!-- Ambient glow sphere -->
-        <circle cx="100" cy="90" r="82" fill="url(#auroraGlow)" />
+        <!-- Deep Conscious Aura -->
+        <circle cx="200" cy="140" r="105" fill="url(#mindAura)" class="anim-pulse" />
 
-        <!-- Rotating radiant sparks around the insight spark -->
-        <g class="spark-group">
-          <!-- Spark 1 -->
-          <circle cx="100" cy="22" r="3.5" fill="#38bdf8" />
-          <!-- Spark 2 -->
-          <circle cx="158" cy="46" r="3" fill="#f43f5e" />
-          <!-- Spark 3 -->
-          <circle cx="168" cy="105" r="3.5" fill="#10b981" />
-          <!-- Spark 4 -->
-          <circle cx="140" cy="155" r="2.5" fill="#8b5cf6" />
-          <!-- Spark 5 -->
-          <circle cx="60" cy="155" r="3" fill="#06b6d4" />
-          <!-- Spark 6 -->
-          <circle cx="32" cy="105" r="3.5" fill="#f59e0b" />
-          <!-- Spark 7 -->
-          <circle cx="42" cy="46" r="2.5" fill="#a855f7" />
+        <!-- Luminous Insight Core -->
+        <circle cx="200" cy="140" r="68" fill="url(#sunGlow)" />
+
+        <!-- Radial Awareness Rays -->
+        <g class="anim-rays" stroke="#ffa94d" stroke-width="2" stroke-linecap="round" opacity="0.7">
+          <line x1="200" y1="42" x2="200" y2="24" />
+          <line x1="200" y1="238" x2="200" y2="256" />
+          <line x1="102" y1="140" x2="84" y2="140" />
+          <line x1="298" y1="140" x2="316" y2="140" />
+          <line x1="131" y1="71" x2="118" y2="58" />
+          <line x1="269" y1="209" x2="282" y2="222" />
+          <line x1="131" y1="209" x2="118" y2="222" />
+          <line x1="269" y1="71" x2="282" y2="58" />
         </g>
 
-        <!-- Dynamic realization rays emanating outwards -->
-        <g stroke-linecap="round" stroke-width="2.5">
-          <line class="beam-ray" x1="100" y1="36" x2="100" y2="48" stroke="#f59e0b" />
-          <line class="beam-ray" style="animation-delay: 0.3s" x1="140" y1="52" x2="131" y2="61" stroke="#ec4899" />
-          <line class="beam-ray" style="animation-delay: 0.6s" x1="154" y1="92" x2="142" y2="92" stroke="#38bdf8" />
-          <line class="beam-ray" style="animation-delay: 0.9s" x1="60" y1="52" x2="69" y2="61" stroke="#10b981" />
-          <line class="beam-ray" style="animation-delay: 1.2s" x1="46" y1="92" x2="58" y2="92" stroke="#8b5cf6" />
+        <!-- Rotating Sacred Geometric Lotus Ring -->
+        <g class="anim-rotate" fill="none" stroke="url(#streamGrad)" stroke-width="1.6" opacity="0.65">
+          <circle cx="200" cy="116" r="24" />
+          <circle cx="200" cy="164" r="24" />
+          <circle cx="176" cy="140" r="24" />
+          <circle cx="224" cy="140" r="24" />
+          <circle cx="183" cy="123" r="24" />
+          <circle cx="217" cy="123" r="24" />
+          <circle cx="183" cy="157" r="24" />
+          <circle cx="217" cy="157" r="24" />
         </g>
 
-        <!-- Central Bulb & Insight Filament (The "Click" spark) -->
-        <g class="pulse-bulb">
-          <!-- Bulb glass dome -->
-          <path d="M72 88 C72 65 84 52 100 52 C116 52 128 65 128 88 C128 101 120 110 116 117 C113 122 113 125 113 127 L87 127 C87 125 87 122 84 117 C80 110 72 101 72 88 Z" 
-                fill="url(#bulbGradient)" 
-                opacity="0.85" />
-          
-          <!-- Inner Awareness Spark (Looping pulse inside) -->
-          <path d="M91 96 C89 83 95 72 100 72 C105 72 111 83 109 96 C105 91 103 91 100 85 C97 91 95 91 91 96 Z" 
-                fill="#ffffff" 
-                opacity="0.9" />
-
-          <!-- Golden glowing base rings -->
-          <path d="M88 131 H112" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
-          <path d="M91 137 H109" stroke="#d97706" stroke-width="3" stroke-linecap="round" />
-          <path d="M95 143 H105" stroke="#b45309" stroke-width="3" stroke-linecap="round" />
+        <!-- Center Awareness Spark (The Click) -->
+        <g class="anim-spark-1">
+          <circle cx="200" cy="76" r="6" fill="#fff" />
+          <path d="M200 60 L203 72 L215 76 L203 80 L200 92 L197 80 L185 76 L197 72 Z" fill="#fff59d" />
+        </g>
+        <g class="anim-spark-2">
+          <path d="M130 130 L132 137 L139 139 L132 141 L130 148 L128 141 L121 139 L128 137 Z" fill="#ffd54f" />
+        </g>
+        <g class="anim-spark-3">
+          <path d="M270 130 L272 137 L279 139 L272 141 L270 148 L268 141 L261 139 L268 137 Z" fill="#80e27e" />
         </g>
 
-        <!-- Small sparkling click stars -->
-        <path d="M100 48 L101.5 52.5 L106 54 L101.5 55.5 L100 60 L98.5 55.5 L94 54 L98.5 52.5 Z" fill="#ffffff" />
-        <path d="M136 78 L137.5 81 L140.5 82 L137.5 83 L136 86 L134.5 83 L131.5 82 L134.5 81 Z" fill="#fef08a" />
+        <!-- Mindful Silhouette Form -->
+        <path d="M174 195 C174 175, 185 162, 200 162 C215 162, 226 175, 226 195 C226 200, 220 205, 200 205 C180 205, 174 200, 174 195 Z" fill="#ffffff" fill-opacity="0.9" />
+        <circle cx="200" cy="142" r="14" fill="#ffffff" fill-opacity="0.95" />
       </svg>
     </div>
 
     <!-- Title -->
-    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center tracking-wide text-stone-900 dark:text-stone-50 mb-8 sm:mb-10 font-ibm">
-      काहीतरी ‘क्लिक’ होते!
-    </h1>
+    <h1 class="doc-title">काहीतरी ‘क्लिक’ होते!</h1>
 
-    <div class="space-y-5 text-base sm:text-lg leading-relaxed text-stone-700 dark:text-stone-300 font-normal">
+    <!-- Main Content -->
+    <div class="content-body">
+      <p>आपण सर्व रोजच्या जीवनात अनेक चुका करत असतो, चुकीचे वर्तन करत असतो, इतरांना दुखावणारे, आपले स्वतःचेच नुकसान करणारे निर्णय घेत असतो. आयुष्यात काहीतरी ‘क्लिक’ होईपर्यंतचा हा एक कालखंड असा असतो की त्यात या सतत होणाऱ्या चुकांची आपल्याला जाणीवच नसते. आपण भानावरच नसतो. <span class="en">State of complete unawareness</span> असते. मग अचानक काहीतरी घडते; आपल्याला एकादी ‘ठेच’ लागते किंवा कर्त्या-करवित्याची इच्छा होते आणि आपला ‘स्वानुभूतीचा प्रवास’ सुरू होतो.</p>
 
-      <p class="content-body">
-        आपण सर्व रोजच्या जीवनात अनेक चुका करत असतो, चुकीचे वर्तन करत असतो, इतरांना दुखावणारे, आपले स्वतःचेच नुकसान करणारे निर्णय घेत असतो.
-      </p>
+      <p class="click-phrase">काहीतरी ‘क्लिक’ होते.</p>
 
-      <p class="content-body">
-        आयुष्यात काहीतरी ‘क्लिक’ होईपर्यंतचा हा एक कालखंड असा असतो की त्यात या सतत होणाऱ्या चुकांची आपल्याला जाणीवच नसते. आपण भानावरच नसतो. State of complete unawareness असते.
-      </p>
+      <p>या नवीन प्रवासात आपण नियमित ध्यानधारणा करू लागतो. निकोप सवयींचा (<span class="en">Healthy Habits</span> चा) जमेल तितका अंगिकार करू लागतो. हे सर्व थोडे थोडे अंगवळणी पडू लागते. रोजच्या जीवनात आपण पूर्वीच्या ‘चुका’ करतच असतो पण अचानक एक वेळ अशी येते की आपल्या हातून चूक झाल्यावर थोड्या वेळानंतर का होईना, पण आपण भानावर येतो; आपल्याला त्या चुकीची लख्ख जाणीव होते. पश्चात बुद्धी होते. <span class="en">Post facto realisation</span> होते.</p>
 
-      <p class="content-body">
-        मग अचानक काहीतरी घडते; आपल्याला एकादी ‘ठेच’ लागते किंवा कर्त्या-करवित्याची इच्छा होते आणि आपला ‘स्वानुभूतीचा प्रवास’ सुरू होतो.
-      </p>
+      <p class="click-phrase">काहीतरी ‘क्लिक’ होते.</p>
 
-      <p class="text-center font-medium italic text-stone-800 dark:text-stone-200 py-1">
-        काहीतरी ‘क्लिक’ होते.
-      </p>
+      <p>काही कालावधीनंतर अचानक आधीसारखीच किंवा एखादी नवीन ‘चूक’ आपल्याकडून होते. पण या वेळेस ती चूक होत असताना किंवा झाल्या क्षणी आपल्याला लक्षात येते, आपण भानावर येतो आणि अर्र, ‘चूक झाली’ अशी जाणीव होते. <span class="en">Present state awareness</span> येतो. <span class="en">Realisation</span> होते.</p>
 
-      <p class="content-body">
-        या नवीन प्रवासात आपण नियमित ध्यानधारणा करू लागतो. निकोप सवयींचा (Healthy Habits चा) जमेल तितका अंगिकार करू लागतो. हे सर्व थोडे थोडे अंगवळणी पडू लागते. रोजच्या जीवनात आपण पूर्वीच्या ‘चुका’ करतच असतो पण अचानक एक वेळ अशी येते की आपल्या हातून चूक झाल्यावर थोड्या वेळानंतर का होईना, पण आपण भानावर येतो; आपल्याला त्या चुकीची लख्ख जाणीव होते. पश्चात बुद्धी होते. Post facto realisation होते.
-      </p>
+      <p class="click-phrase">काहीतरी ‘क्लिक’ होते.</p>
 
-      <p class="text-center font-medium italic text-stone-800 dark:text-stone-200 py-1">
-        काहीतरी ‘क्लिक’ होते.
-      </p>
+      <p>हळूहळू या <span class="en">state of awareness</span> ची, <span class="en">realisation</span> आणि <span class="en">mindfulness</span> ची, भानावर राहण्याची, वर्तमानात जगण्याची सवय अंगवळणी पडायला लागते. आपल्याला ‘आतून’ बरे वाटते आहे असे कुठेतरी नक्की जाणवू लागते.</p>
 
-      <p class="content-body">
-        काही कालावधीनंतर अचानक आधीसारखीच किंवा एखादी नवीन ‘चूक’ आपल्याकडून होते. पण या वेळेस ती चूक होत असताना किंवा झाल्या क्षणी आपल्याला लक्षात येते, आपण भानावर येतो आणि अर्र, ‘चूक झाली’ अशी जाणीव होते. Present state awareness येतो. Realisation होते.
-      </p>
+      <p class="click-phrase">काहीतरी ‘क्लिक’ होते.</p>
 
-      <p class="text-center font-medium italic text-stone-800 dark:text-stone-200 py-1">
-        काहीतरी ‘क्लिक’ होते.
-      </p>
+      <p>मग अजून काही दिवसांनी पुन्हा एक वेळ येते; पूर्वी अनुभवलेल्या परिस्थितीसम किंवा एखादी अगदी वेगळी घटना घडते. पण या वेळेस मात्र आधीच काहीतरी ‘क्लिक’ होते आणि आपल्याकडून पूर्वीसारखी किंवा एखादी नवीन ‘चूक’ होण्याआधीच आपण भानावर येतो, अचानक कसलीतरी जाणीव होते आणि पूर्णपणे वर्तमानात राहून आपण एक योग्य निर्णय घेतो. यापूर्वी आपल्या हातून सर्रास होऊ शकणारी तीच ती ‘चूक’ आपण यशस्वीरीत्या टाळतो, होऊच देत नाही. मनाला खूप समाधान वाटते, आतून ‘गार’ वाटते. हलके वाटते. हेच असते <span class="en">pre-emptive realisation</span>. हाच तो <span class="en">pre-emptive awareness</span>. हे सगळे फक्त आपल्याकडून होणाऱ्या ‘घोडचुकांच्या’ बाबतीतच होते असे अजिबात नाही. आपल्याच, वरवर पाहता क्षुल्लक वाटणाऱ्या पण चुकीच्या सवयींमध्ये होणारे सकारात्मक बदल देखील आपले आपल्यालाच लक्षात येऊ लागतात.</p>
 
-      <p class="content-body">
-        हळूहळू या state of awareness ची, realisation आणि mindfulness ची, भानावर राहण्याची, वर्तमानात जगण्याची सवय अंगवळणी पडायला लागते. आपल्याला ‘आतून’ बरे वाटते आहे असे कुठेतरी नक्की जाणवू लागते.
-      </p>
+      <p class="click-phrase">काहीतरी ‘क्लिक’ होते.</p>
 
-      <p class="text-center font-medium italic text-stone-800 dark:text-stone-200 py-1">
-        काहीतरी ‘क्लिक’ होते.
-      </p>
+      <p>यानंतरही मनुष्यस्वभावानुसार होणाऱ्या ‘चुका’ आपल्या कडून होतच राहतात. त्या बंद होत नाहीत. कदाचित थोड्या कमी होतात. पण तरीही हे भानावर असणे, वर्तमानात जगणे, <span class="en">aware</span> आणि <span class="en">mindful</span> असणे हळू हळू अंगी भिनते. त्याची सवय होते. ही अर्थातच उत्तम सवय आहे. वेळोवेळी काहीतरी ‘क्लिक’ होतच राहते. ‘क्लिकक्लिकाट’ होण्याची फ्रिक्वेन्सी वाढते. वाढलेल्या ‘क्लिक्स’ जाणवू लागतात.</p>
 
-      <p class="content-body">
-        मग अजून काही दिवसांनी पुन्हा एक वेळ येते; पूर्वी अनुभवलेल्या परिस्थितीसम किंवा एखादी अगदी वेगळी घटना घडते. पण या वेळेस मात्र आधीच काहीतरी ‘क्लिक’ होते आणि आपल्याकडून पूर्वीसारखी किंवा एखादी नवीन ‘चूक’ होण्याआधीच आपण भानावर येतो, अचानक कसलीतरी जाणीव होते आणि पूर्णपणे वर्तमानात राहून आपण एक योग्य निर्णय घेतो. यापूर्वी आपल्या हातून सर्रास होऊ शकणारी तीच ती ‘चूक’ आपण यशस्वीरीत्या टाळतो, होऊच देत नाही. मनाला खूप समाधान वाटते, आतून ‘गार’ वाटते. हलके वाटते. हेच असते pre-emptive realisation. हाच तो pre-emptive awareness.
-      </p>
+      <div class="section-separator">⧫⧫⧫</div>
 
-      <p class="content-body">
-        हे सगळे फक्त आपल्याकडून होणाऱ्या ‘घोडचुकांच्या’ बाबतीतच होते असे अजिबात नाही. आपल्याच, वरवर पाहता क्षुल्लक वाटणाऱ्या पण चुकीच्या सवयींमध्ये होणारे सकारात्मक बदल देखील आपले आपल्यालाच लक्षात येऊ लागतात.
-      </p>
+      <p>या ज्या ‘क्लिक्स’ असतात ना; ज्या आपल्याला शब्दांतही व्यक्त करता येत नाहीत आणि कोणत्याही प्रकारे दाखवूनही देता येत नाहीत, त्या ‘क्लिक्स’ म्हणजेच त्या त्या वेळेस येणारी ‘अनुभूती’ असते! ही ‘अनुभूती’ खूप काही उपासना केल्यावरच मिळते असे अजिबात नाही. आयुष्याच्या प्रवासात वेगवेगळ्या वेळी होणाऱ्या ‘क्लिक्स’ मधून ती आपल्या समोर येत राहते. आपण त्याची जाणीव ठेऊन, भानावर राहून ती त्या त्या वेळेस गोळा करायची असते आणि तिचा साठा वाढवायचा असतो. पण एक आहे; ‘अनुभूती’ ज्याची त्यालाच मिळवता येते; आणि प्रामाणिक प्रयत्न केले तर ती येतेच. आयुष्याच्या प्रवासात खूप पुढे जाऊन कदाचित काहीतरी ‘क्लिक’ होणे देखील जाणवायचे बंद होत असेल आणि तीच कदाचित <span class="en">enlightenment</span> असेल. असेना बापडी. आपल्यासारख्या सामान्य जीवांसाठी या वेळोवेळी पदरात पडणाऱ्या ‘अनुभूती क्लिक्स’ गोळा करत राहणे सुखी आणि समाधानी आयुष्यासाठी पुरेसे आहे हे नक्की.</p>
 
-      <p class="text-center font-medium italic text-stone-800 dark:text-stone-200 py-1">
-        काहीतरी ‘क्लिक’ होते.
-      </p>
+      <div class="date-centered">⧫ २०२३१०१० ⧫</div>
 
-      <p class="content-body">
-        यानंतरही मनुष्यस्वभावानुसार होणाऱ्या ‘चुका’ आपल्या कडून होतच राहतात. त्या बंद होत नाहीत. कदाचित थोड्या कमी होतात. पण तरीही हे भानावर असणे, वर्तमानात जगणे, aware आणि mindful असणे हळू हळू अंगी भिनते. त्याची सवय होते. ही अर्थातच उत्तम सवय आहे. वेळोवेळी काहीतरी ‘क्लिक’ होतच राहते. ‘क्लिकक्लिकाट’ होण्याची फ्रिक्वेन्सी वाढते. वाढलेल्या ‘क्लिक्स’ जाणवू लागतात.
-      </p>
-
-      <!-- Center divider symbol -->
-      <div class="text-center text-lg sm:text-xl text-stone-400 dark:text-stone-500 py-3 tracking-widest select-none">
-        ⧫⧫⧫
+      <!-- Share Button at Bottom -->
+      <div class="bottom-actions">
+        <button class="icon-btn share-btn" id="shareBtn" aria-label="Share">
+          <svg viewBox="0 0 24 24">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
       </div>
 
-      <p class="content-body">
-        या ज्या ‘क्लिक्स’ असतात ना; ज्या आपल्याला शब्दांतही व्यक्त करता येत नाहीत आणि कोणत्याही प्रकारे दाखवूनही देता येत नाहीत, त्या ‘क्लिक्स’ म्हणजेच त्या त्या वेळेस येणारी ‘अनुभूती’ असते!
-      </p>
-
-      <p class="content-body">
-        ही ‘अनुभूती’ खूप काही उपासना केल्यावरच मिळते असे अजिबात नाही. आयुष्याच्या प्रवासात वेगवेगळ्या वेळी होणाऱ्या ‘क्लिक्स’ मधून ती आपल्या समोर येत राहते. आपण त्याची जाणीव ठेऊन, भानावर राहून ती त्या त्या वेळेस गोळा करायची असते आणि तिचा साठा वाढवायचा असतो.
-      </p>
-
-      <p class="content-body">
-        पण एक आहे; ‘अनुभूती’ ज्याची त्यालाच मिळवता येते; आणि प्रामाणिक प्रयत्न केले तर ती येतेच.
-      </p>
-
-      <p class="content-body">
-        आयुष्याच्या प्रवासात खूप पुढे जाऊन कदाचित काहीतरी ‘क्लिक’ होणे देखील जाणवायचे बंद होत असेल आणि तीच कदाचित enlightenment असेल. असेना बापडी. आपल्यासारख्या सामान्य जीवांसाठी या वेळोवेळी पदरात पडणाऱ्या ‘अनुभूती क्लिक्स’ गोळा करत राहणे सुखी आणि समाधानी आयुष्यासाठी पुरेसे आहे हे नक्की.
-      </p>
-
-      <!-- Concluding date stamp & symbol -->
-      <p class="text-center text-sm sm:text-base text-stone-500 dark:text-stone-400 pt-3">
-        ⧫ २०२३१०१० ⧫
-      </p>
-
     </div>
-
-    <div class="mt-10 pt-6 border-t border-stone-200 dark:border-stone-800 flex flex-col items-center">
-      <button id="shareBtn" class="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-medium text-base shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 dark:focus:ring-offset-stone-900 cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="18" cy="5" r="3"></circle>
-          <circle cx="6" cy="12" r="3"></circle>
-          <circle cx="18" cy="19" r="3"></circle>
-          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-        </svg>
-        <span>शेअर करा</span>
-      </button>
-
-      <!-- Notification message for clipboard copy fallback -->
-      <div id="toast" class="opacity-0 transition-opacity duration-300 mt-3 text-xs sm:text-sm text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-stone-800 px-4 py-1.5 rounded-full border border-stone-200 dark:border-stone-700 pointer-events-none">
-        लिंक कॉपी झाली!
-      </div>
-    </div>
-
   </main>
 
-  <script>
-    // Theme Switcher Logic
-    const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const htmlElement = document.documentElement;
+  <div class="toast" id="toast">Link copied to clipboard!</div>
 
-    // Check system preference or saved preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && prefersDark)) {
-      htmlElement.classList.add('dark');
-    } else {
-      htmlElement.classList.remove('dark');
+  <script>
+    // Theme toggle logic
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const sunIcon = document.getElementById('themeIconSun');
+    const moonIcon = document.getElementById('themeIconMoon');
+    const htmlEl = document.documentElement;
+
+    function applyTheme(theme) {
+      htmlEl.setAttribute('data-theme', theme);
+      if (theme === 'dark') {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      } else {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      }
+      try {
+        localStorage.setItem('doc_theme', theme);
+      } catch (e) {}
+    }
+
+    const savedTheme = (() => {
+      try { return localStorage.getItem('doc_theme'); } catch(e) { return null; }
+    })();
+
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      applyTheme('dark');
     }
 
     themeToggleBtn.addEventListener('click', () => {
-      if (htmlElement.classList.contains('dark')) {
-        htmlElement.classList.remove('dark');
-        localStorage.theme = 'light';
-      } else {
-        htmlElement.classList.add('dark');
-        localStorage.theme = 'dark';
-      }
+      const current = htmlEl.getAttribute('data-theme');
+      applyTheme(current === 'dark' ? 'light' : 'dark');
     });
 
-    // Share Button Logic (Web Share API with Clipboard Fallback)
+    // Share & Copy functionality
     const shareBtn = document.getElementById('shareBtn');
     const toast = document.getElementById('toast');
 
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.remove('opacity-0');
-      toast.classList.add('opacity-100');
-      setTimeout(() => {
-        toast.classList.remove('opacity-100');
-        toast.classList.add('opacity-0');
-      }, 2500);
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
     shareBtn.addEventListener('click', async () => {
       const shareData = {
         title: 'काहीतरी ‘क्लिक’ होते!',
-        text: 'काहीतरी ‘क्लिक’ होते! - एक सुंदर व विचारप्रवर्तक वाचन.',
+        text: 'काहीतरी ‘क्लिक’ होते! - स्वानुभूतीचा प्रवास',
         url: window.location.href
       };
 
@@ -361,8 +518,9 @@
         try {
           await navigator.share(shareData);
         } catch (err) {
-          // Fallback if dismissed or failed
-          copyUrlFallback();
+          if (err.name !== 'AbortError') {
+            copyUrlFallback();
+          }
         }
       } else {
         copyUrlFallback();
@@ -370,20 +528,23 @@
     });
 
     function copyUrlFallback() {
-      const textToCopy = window.location.href;
-      const tempInput = document.createElement('input');
-      tempInput.style.position = 'absolute';
-      tempInput.style.left = '-9999px';
-      tempInput.value = textToCopy;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand('copy');
-        showToast('लिंक कॉपी झाली!');
-      } catch (err) {
-        showToast('शेअर करणे शक्य झाले नाही');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(window.location.href)
+          .then(() => showToast('Link copied to clipboard!'))
+          .catch(() => showToast('Could not copy link'));
+      } else {
+        const input = document.createElement('input');
+        input.value = window.location.href;
+        document.body.appendChild(input);
+        input.select();
+        try {
+          document.execCommand('copy');
+          showToast('Link copied to clipboard!');
+        } catch (e) {
+          showToast('Could not copy link');
+        }
+        document.body.removeChild(input);
       }
-      document.body.removeChild(tempInput);
     }
   </script>
 </body>
